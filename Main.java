@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -8,9 +9,16 @@ public class Main {
         sc.nextLine();
 
         if (choice == 3) {
-            System.out.println("Введите текст для сортировки:");
-            String text = sc.nextLine();
-            TextOperations.sortWordsByLength(text);
+            System.out.println("Введите текст для сортировки (или нажмите Enter для использования заготовленного предложения):");
+            String input = sc.nextLine().trim();
+
+            String text = input.isEmpty() ? Text.defaultText() : input;
+            Text textObject = new Text(text);
+
+            System.out.println("\nИсходное предложение:");
+            textObject.printOriginal();  // Вывод первоначального предложения
+
+            textObject.sortWordsByLength();  // Сортировка слов
         } else {
             System.out.println("Введите число строк массива: ");
             int numberOfRows = sc.nextInt();
@@ -24,26 +32,32 @@ public class Main {
                 choiceInputMethod = sc.nextLine().trim().toLowerCase();
             } while (!choiceInputMethod.equals("y") && !choiceInputMethod.equals("n"));
 
-            int[][] matrix;
+            int[][] originalMatrix;
             if (choiceInputMethod.equals("y")) {
-                matrix = MatrixOperations.generateRandomMatrix(numberOfRows, numberOfColumns);
+                originalMatrix = Matrix.generateRandomMatrix(numberOfRows, numberOfColumns);
             } else {
-                matrix = MatrixOperations.inputMatrix(numberOfRows, numberOfColumns);
+                originalMatrix = Matrix.inputMatrix(numberOfRows, numberOfColumns);
             }
+	    
+	        // Создаем копию матрицы перед изменениями
+            Matrix matrixCopy = new Matrix(originalMatrix);
 
             switch (choice) {
                 case 1:
-                    MatrixOperations.swapFirstLastColumns(matrix);
+                    matrixCopy.swapFirstLastColumns();
                     break;
                 case 2:
-                    MatrixOperations.createEvenRowsMatrix(matrix);
+                    matrixCopy.createEvenRowsMatrix();
                     break;
                 case 4:
-                    MatrixOperations.findMinimalPositive(matrix);
+                    matrixCopy.findMinimalPositive();
                     break;
                 default:
                     System.out.println("Неверный выбор задания.");
             }
+
+            System.out.println("\nОригинальная матрица:");
+            matrixCopy.outputMatrix();
         }
         sc.close();
     }
