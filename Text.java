@@ -3,21 +3,17 @@ public class Text {
     private String[] words;
 
     public Text(String text) {
-        this.originalText = text;
-        this.words = text.split("[\\s]+|(?=[\\W])|(?<=[\\W])");
+            this.originalText = text;
+            this.words = text.split("[\\s]+|(?=[\\W])|(?<=[\\W])");
     }
-
-    // Метод для возврата заготовленного предложения
-    public static String defaultText() {
-        return "Today is a good day!";
+    public Text(){
+        this("Today is a good day!");
     }
 
     // Метод для вывода исходного предложения
     public void printOriginal() {
         System.out.println(originalText);
     }
-
-    //TODO Задача 3 - Сортировка слов по длине
     public void sortWordsByLength() {
         int n = words.length;
 
@@ -38,7 +34,7 @@ public class Text {
     public void printSorted() {
         System.out.println("\nОтсортированные слова по длине:");
         for (String word : words) {
-            if (Character.isLetter(word.charAt(0))) {
+            if (word.length() == 0 || Character.isLetter(word.charAt(0))) {
                 System.out.print(word + " ");
             }
         }
