@@ -10,14 +10,16 @@ public class Main {
 
         if (choice == 3) {
             System.out.println("Введите текст для сортировки (или нажмите Enter для использования заготовленного предложения):");
-            String input = sc.nextLine().trim();
+            String text = sc.nextLine().trim();
 
-            String text = input.isEmpty() ? Text.defaultText() : input;
-            Text textObject = new Text(text);
-
+            Text textObject;
+            if(text.isEmpty()){
+             textObject= new Text();}
+            else{
+                textObject = new Text(text);
+            }
             System.out.println("\nИсходное предложение:");
-            textObject.printOriginal();  // Вывод первоначального предложения
-
+            textObject.printOriginal();
             textObject.sortWordsByLength();  // Сортировка слов
         } else {
             System.out.println("Введите число строк массива: ");
@@ -27,37 +29,40 @@ public class Main {
             sc.nextLine();
 
             String choiceInputMethod;
+
             do {
                 System.out.println("Инициализировать матрицу автоматически? [Y/n]");
                 choiceInputMethod = sc.nextLine().trim().toLowerCase();
             } while (!choiceInputMethod.equals("y") && !choiceInputMethod.equals("n"));
 
-            int[][] originalMatrix;
+            Matrix matrix;
             if (choiceInputMethod.equals("y")) {
-                originalMatrix = Matrix.generateRandomMatrix(numberOfRows, numberOfColumns);
+                matrix = new Matrix(numberOfRows, numberOfColumns, true);
             } else {
-                originalMatrix = Matrix.inputMatrix(numberOfRows, numberOfColumns);
+                matrix = new Matrix(numberOfRows, numberOfColumns, false);
             }
-	    
-	        // Создаем копию матрицы перед изменениями
-            Matrix matrixCopy = new Matrix(originalMatrix);
 
             switch (choice) {
                 case 1:
-                    matrixCopy.swapFirstLastColumns();
+                    System.out.println("\nИсходная матрица:\n");
+                    matrix.outputMatrix();
+                    System.out.println("\nРезультат:\n");
+                    matrix.outputMatrix(matrix.swapFirstLastColumns());
                     break;
                 case 2:
-                    matrixCopy.createEvenRowsMatrix();
+                    System.out.println("\nИсходная матрица:\n");
+                    matrix.outputMatrix();
+                    System.out.println("\nРезультат:\n");
+                    matrix.outputMatrix(matrix.createEvenRowsMatrix());
                     break;
                 case 4:
-                    matrixCopy.findMinimalPositive();
+                    System.out.println("\nИсходная матрица:");
+                    matrix.outputMatrix();
+                    matrix.findMinimalPositive();
                     break;
                 default:
                     System.out.println("Неверный выбор задания.");
             }
-
-            System.out.println("\nОригинальная матрица:");
-            matrixCopy.outputMatrix();
         }
         sc.close();
     }
