@@ -2,46 +2,45 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Matrix {
-    private int[][] matrix;
 
-    public Matrix(int[][] original) {
-        this.matrix = new int[original.length][original[0].length];
-        for (int i = 0; i < original.length; i++) {
-            for (int j = 0; j < original[i].length; j++) {
-                this.matrix[i][j] = original[i][j];
-            }
+    private int[][] matrix;
+    private Scanner sc = new Scanner(System.in);
+
+    public Matrix(int rows, int columns, boolean autoGenerate) {
+        matrix = new int[rows][columns];
+        if (autoGenerate) {
+            generateRandomMatrix();
+        } else {
+            inputMatrix();
         }
     }
 
-    public static Scanner sc = new Scanner(System.in);
-
     // Метод для ввода матрицы
-    public static int[][] inputMatrix(int rows, int columns) {
-        int[][] matrix = new int[rows][columns];
+    private void inputMatrix() {
         System.out.println("Введите элементы матрицы:");
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
                 matrix[i][j] = sc.nextInt();
             }
         }
         sc.nextLine(); // Очистка буфера
-        return matrix;
     }
 
     // Метод для автоматической инициализации матрицы
-    public static int[][] generateRandomMatrix(int rows, int columns) {
-        int[][] matrix = new int[rows][columns];
+    private void generateRandomMatrix() {
         Random rnd = new Random();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
                 matrix[i][j] = rnd.nextInt(201) - 100;
             }
         }
-        return matrix;
     }
 
-    // Метод для вывода матрицы на экран
     public void outputMatrix() {
+        outputMatrix(matrix);
+    }
+
+    public void outputMatrix(int[][] matrix) {
         for (int[] row : matrix) {
             for (int value : row) {
                 System.out.print(value + " ");
@@ -50,13 +49,8 @@ public class Matrix {
         }
     }
 
-    // Копирование матрицы
-
-    //TODO Задача 1 - Перестановка элементов первого и последнего столбцов, если элемент первого столбца меньше элемента последнего столбца
-    public void swapFirstLastColumns() {
-        System.out.println("\nИсходная матрица:");
-        outputMatrix();
-
+    // Метод для перестановки первого и последнего столбцов
+    public int[][] swapFirstLastColumns() {
         for (int i = 0; i < matrix.length; i++) {
             if (matrix[i][0] < matrix[i][matrix[i].length - 1]) {
                 int temp = matrix[i][0];
@@ -64,16 +58,11 @@ public class Matrix {
                 matrix[i][matrix[i].length - 1] = temp;
             }
         }
-
-        System.out.println("\nПолученная матрица:");
-        outputMatrix();
+        return matrix;
     }
 
-    //TODO Задача 2 - Создание матрицы, состоящей из элементов четных строк исходящей матрицы
-    public void createEvenRowsMatrix() {
-        System.out.println("\nИсходная матрица:");
-        outputMatrix();
-
+    // Метод для создания новой матрицы из четных строк
+    public int[][] createEvenRowsMatrix() {
         int rows = matrix.length / 2;
         int columns = matrix[0].length;
         int[][] result = new int[rows][columns];
@@ -82,23 +71,13 @@ public class Matrix {
                 result[i / 2][j] = matrix[i][j];
             }
         }
-
-        System.out.println("\nПолученная матрица:");
-        for (int[] row : result) {
-            for (int value : row) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
-        }
+        return result;
     }
 
-    //TODO Задача 4 - Нахождение минимального положительного элемента в матрице
+    // Метод для поиска минимального положительного элемента
     public void findMinimalPositive() {
-        System.out.println("\nИсходная матрица:");
-        outputMatrix();
-
         int minimalNumber = Integer.MAX_VALUE;
-        boolean foundPositive = false;  // Флаг для отслеживания наличия положительных элементов
+        boolean foundPositive = false;
 
         for (int[] row : matrix) {
             for (int value : row) {
